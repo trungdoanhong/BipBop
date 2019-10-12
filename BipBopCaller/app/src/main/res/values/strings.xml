@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">BipBopCaller</string>
+    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyCQNlp7KbSIsEclvkX2rk5vFIi2h1EfQ8c</string>
+</resources>
