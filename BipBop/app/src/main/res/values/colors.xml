@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#C5859D</color>
+    <color name="bg">#FFF99F</color>
+    <color name="fr1">#C5859D</color>
+    <color name="fr2">#C5859D</color>
+    <color name="fr3">#C5859D</color>
+    <color name="fr4">#C5859D</color>
+
+    <color name="colorPrimary">#FFF110</color>
+    <color name="colorPrimaryDark">#1F4C46</color>
+    <color name="colorAccent">#60C367</color>
+    <color name="fragColorgb">#EAEAEA</color>
+    <color name="fragColorgb2">#97E39C</color>
+    <color name="chu2">#097811</color>
 </resources>
