@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".TopBar">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="200px"
+        android:background="@color/colorAccent"
+        android:orientation="horizontal"
+        android:weightSum="1">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="50px"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.4"
+            android:paddingTop="20px"
+            android:src="@drawable/title" />
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40px"
+            android:layout_weight="0.3"
+            android:paddingLeft="40px"
+            android:src="@drawable/acclogo" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="0px"
+            android:layout_height="match_parent"
+            android:layout_weight="0.4"
+            android:fontFamily="Corbel"
+            android:gravity="center_vertical"
+            android:text="Tài khoản"
+            android:textColor="@color/colorPrimary"
+            android:textSize="24sp" />
+
+    </LinearLayout>
+</FrameLayout>
