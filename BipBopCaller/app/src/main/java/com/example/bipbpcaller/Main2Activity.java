@@ -77,9 +77,12 @@ public class Main2Activity extends AppCompatActivity implements OnMapReadyCallba
 
     public void CallBipBop(View v) {
 
+        Intent myIntent = new Intent(Main2Activity.this, Main3Activity.class);
+        Main2Activity.this.startActivity(myIntent);
+
         // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(this);
-        String url ="https://deltaxrobot.com/signal.txt";
+        String url ="https://deltaxrobot.com/setsignal.php?vl=1";
 
         Log.i("tag", url);
 

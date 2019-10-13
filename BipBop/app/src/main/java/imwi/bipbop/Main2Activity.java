@@ -2,6 +2,7 @@ package imwi.bipbop;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -71,7 +72,14 @@ public class Main2Activity extends AppCompatActivity implements OnMapReadyCallba
         showCurrentPlace();
     }
 
-    public void CallBipBop(View v) {
+    public void ChiDuong(View v) {
+
+    }
+
+    public void ImComing(View v) {
+
+        Intent myIntent = new Intent(Main2Activity.this, Main3Activity.class);
+        Main2Activity.this.startActivity(myIntent);
 
         // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(this);
