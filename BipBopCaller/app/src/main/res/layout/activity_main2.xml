@@ -67,11 +67,10 @@
                 android:layout_marginBottom="50px"
                 android:background="@drawable/search"
                 android:gravity="center_vertical"
-                android:text="TextView"
+                android:text="Địa chỉ của bạn"
                 android:textAlignment="center"
                 android:textColor="@color/colorPrimary"
-                android:textSize="30sp"
-                tools:text="Địa chỉ của bạn" />
+                android:textSize="30sp" />
         </LinearLayout>
 
         <fragment

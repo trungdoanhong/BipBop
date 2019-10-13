@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
     public void nextPage(View v) {
 
         Intent myIntent = new Intent(MainActivity.this, Main2Activity.class);
+        myIntent.putExtra("stufftype", etStuffType.getText().toString());
         MainActivity.this.startActivity(myIntent);
     }
 

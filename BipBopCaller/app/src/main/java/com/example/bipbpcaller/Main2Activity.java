@@ -11,14 +11,23 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.JsonWriter;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
+import com.android.volley.Cache;
+import com.android.volley.Network;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.BasicNetwork;
+import com.android.volley.toolbox.DiskBasedCache;
+import com.android.volley.toolbox.HurlStack;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
@@ -39,6 +48,15 @@ import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.StringWriter;
+import java.io.Writer;
+import java.util.Timer;
+import java.util.TimerTask;
+
 
 public class Main2Activity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -73,12 +91,65 @@ public class Main2Activity extends AppCompatActivity implements OnMapReadyCallba
                 .findFragmentById(R.id.map_fragment);
         mapFragment.getMapAsync(this);
         showCurrentPlace();
+
+        Intent intent = getIntent();
+        StuffType = intent.getStringExtra("stufftype");
     }
 
-    public void CallBipBop(View v) {
+    public Timer t;
+    public Button bt;
 
-        Intent myIntent = new Intent(Main2Activity.this, Main3Activity.class);
-        Main2Activity.this.startActivity(myIntent);
+    String StuffType;
+
+    public void SendInfo() throws IOException {
+        StringWriter output = new StringWriter();
+
+        JsonWriter jsonWriter = new JsonWriter(output);
+
+        jsonWriter.beginObject();// begin root
+
+        jsonWriter.name("stufftype").value(StuffType);
+        jsonWriter.name("xlocation").value(mLastKnownLocation.getLatitude());
+        jsonWriter.name("xlocation").value(mLastKnownLocation.getLongitude());
+
+        // end root
+        jsonWriter.endObject();
+
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String url ="https://deltaxrobot.com/setdata.php?info=" + output.toString();
+
+        Log.i("tag", url);
+
+// Request a string response from the provided URL.
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // Display the first 500 characters of the response string.
+                        Log.i("tag", response);
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.i("tag", "error");
+            }
+        });
+        queue.add(stringRequest);
+    }
+
+    public void CallBipBop(View v) throws IOException {
+
+        bt = (Button)v;
+
+        if (bt.getText().equals("Đang tìm Bíp Bóp"))
+        {
+            return;
+        }
+
+        SendInfo();
+
+        bt.setText("Đang tìm Bíp Bóp");
 
         // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(this);
@@ -102,6 +173,68 @@ public class Main2Activity extends AppCompatActivity implements OnMapReadyCallba
             }
         });
         queue.add(stringRequest);
+
+        t = new Timer();
+        t.schedule(new TimerTask() {
+
+            public void run()
+            {
+                Log.i("t", "+++");
+
+                RequestQueue requestQueue;
+
+// Instantiate the cache
+                Cache cache = new DiskBasedCache(getCacheDir(), 1024 * 1024); // 1MB cap
+
+// Set up the network to use HttpURLConnection as the HTTP client.
+                Network network = new BasicNetwork(new HurlStack());
+
+// Instantiate the RequestQueue with the cache and network.
+                requestQueue = new RequestQueue(cache, network);
+
+// Start the queue
+                requestQueue.start();
+
+                String url ="https://deltaxrobot.com/signal.txt";
+
+// Formulate the request and handle the response.
+                StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                        new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                if (response.equals("2"))
+                                {
+                                    Main2Activity.this.bt.setText("Bíp Bọp đang đến");
+
+                                }
+                                if (response.equals("3"))
+                                {
+                                    Main2Activity.this.t.cancel();
+                                    Main2Activity.this.bt.setText("Bíp Bọp đã đến");
+
+                                    new Handler().postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Intent myIntent = new Intent(Main2Activity.this, Main3Activity.class);
+                                            Main2Activity.this.startActivity(myIntent);
+                                        }
+                                    }, 2000);
+                                }
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                // Handle error
+                            }
+                        });
+
+// Add the request to the RequestQueue.
+                requestQueue.add(stringRequest);
+            }
+        }, 5000,5000);
+
+
     }
 
     @Override

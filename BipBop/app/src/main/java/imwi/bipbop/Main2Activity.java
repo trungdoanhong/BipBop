@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -37,12 +38,19 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class Main2Activity extends AppCompatActivity implements OnMapReadyCallback {
+
+    String StuffType = "{\"stufftype\":\"Phế liệu, giấy vụn, lon nước\",\"xlocation\":16.0743724,\"xlocation\":108.2238442}";
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
     private GoogleMap mMap;
     private GeoDataClient mGeoDataClient;
+    private CustomMarker destinationLocation;
+    private CustomMarker currentLocation;
     private Location mLastKnownLocation;
     private PlaceDetectionClient mPlaceDetectionClient;
     private FusedLocationProviderClient mFusedLocationProviderClient;
@@ -58,10 +66,14 @@ public class Main2Activity extends AppCompatActivity implements OnMapReadyCallba
     private String[] mLikelyPlaceAttributions;
     private LatLng[] mLikelyPlaceLatLngs;
 
+    public JSONObject jsonRoot;
+    public String stuffType;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
+
 
         mGeoDataClient = Places.getGeoDataClient(this, null);
         mPlaceDetectionClient = Places.getPlaceDetectionClient(this, null);
@@ -70,10 +82,33 @@ public class Main2Activity extends AppCompatActivity implements OnMapReadyCallba
                 .findFragmentById(R.id.map_fragment);
         mapFragment.getMapAsync(this);
         showCurrentPlace();
+
+
+
+        try {
+            Intent gintent = getIntent();
+            StuffType = gintent.getStringExtra("stufftype");
+
+            Log.i("fdsf", StuffType);
+
+            jsonRoot = new JSONObject(StuffType);
+            Double xlocation = Double.parseDouble(jsonRoot.getString("xlocation")) ;
+            Double ylocation = Double.parseDouble(jsonRoot.getString("ylocation"));
+
+            destinationLocation = new CustomMarker(xlocation, ylocation, "", "");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        Intent intent = new Intent(this, LogService.class);
+        startService(intent);
+
     }
 
-    public void ChiDuong(View v) {
 
+
+    public void ChiDuong(View v) {
+        GetDirection(destinationLocation);
     }
 
     public void ImComing(View v) {
@@ -83,7 +118,7 @@ public class Main2Activity extends AppCompatActivity implements OnMapReadyCallba
 
         // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(this);
-        String url ="https://deltaxrobot.com/signal.txt";
+        String url ="https://deltaxrobot.com/setsignal.php?vl=2";
 
         Log.i("tag", url);
 
@@ -135,6 +170,9 @@ public class Main2Activity extends AppCompatActivity implements OnMapReadyCallba
         getLocationPermission();
         updateLocationUI();
         getDeviceLocation();
+
+        mMap.addMarker(destinationLocation.markerOptions);
+        mMap.addMarker(currentLocation.markerOptions);
     }
 
     @Override
@@ -212,6 +250,7 @@ public class Main2Activity extends AppCompatActivity implements OnMapReadyCallba
                             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
                                     new LatLng(mLastKnownLocation.getLatitude(),
                                             mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
+                            currentLocation.markerOptions = new MarkerOptions().position(new LatLng(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude()));
                         } else {
                             Log.d(TAG, "Current location is null. Using defaults.");
                             Log.e(TAG, "Exception: %s", task.getException());
@@ -329,5 +368,16 @@ public class Main2Activity extends AppCompatActivity implements OnMapReadyCallba
                 .setTitle(R.string.pick_place)
                 .setItems(mLikelyPlaceNames, listener)
                 .show();
+    }
+
+    public void GetDirection(CustomMarker custom) {
+        String x_str = Double.toString(custom.x_pos);
+        String y_str = Double.toString(custom.y_pos);
+        Uri gmmIntentUri = Uri.parse("google.navigation:q="+ x_str + "," + y_str + "&mode=d");
+        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+        mapIntent.setPackage("com.google.android.apps.maps");
+        if (mapIntent.resolveActivity(getPackageManager()) != null) {
+            startActivity(mapIntent);
+        }
     }
 }
