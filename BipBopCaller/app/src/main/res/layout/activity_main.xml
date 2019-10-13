@@ -17,6 +17,7 @@
         map:layout_constraintHorizontal_bias="0.0"
         map:layout_constraintStart_toStartOf="parent"
         map:layout_constraintTop_toTopOf="parent"
+        map:layout_constraintVertical_bias="0.0"
         tools:context=".MapsActivity" />
 
     <androidx.constraintlayout.widget.Guideline
@@ -120,7 +121,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
-                android:id="@+id/imageView2"
+                android:id="@+id/imv_get_direction"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 app:layout_constraintBottom_toTopOf="@+id/guideline5"
@@ -130,7 +131,7 @@
                 app:srcCompat="@drawable/ic_arrow_up" />
 
             <TextView
-                android:id="@+id/textView4"
+                android:id="@+id/tv_get_direction"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:gravity="center"

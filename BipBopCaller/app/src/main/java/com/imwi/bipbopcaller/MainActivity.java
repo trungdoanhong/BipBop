@@ -7,11 +7,14 @@ import androidx.core.content.ContextCompat;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.gms.location.places.GeoDataClient;
@@ -19,7 +22,6 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -28,7 +30,6 @@ import com.google.android.gms.location.places.PlaceDetectionClient;
 import com.google.android.gms.location.places.PlaceLikelihood;
 import com.google.android.gms.location.places.PlaceLikelihoodBufferResponse;
 import com.google.android.gms.location.places.Places;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -36,8 +37,12 @@ import com.google.android.gms.tasks.Task;
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private static final String TAG = MainActivity.class.getSimpleName();
+    private ImageView imvGetDirection;
+    private TextView tvGetDirection;
 
     private GoogleMap mMap;
+    private CustomMarker destinationLocation;
+    private CustomMarker currentLocation;
     private GeoDataClient mGeoDataClient;
     private Location mLastKnownLocation;
     private PlaceDetectionClient mPlaceDetectionClient;
@@ -61,19 +66,21 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         mGeoDataClient = Places.getGeoDataClient(this, null);
         mPlaceDetectionClient = Places.getPlaceDetectionClient(this, null);
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+
+        currentLocation = new CustomMarker(16.075368, 108.149045,"Makrer 1", "Da Nang" );
+        destinationLocation = new CustomMarker(16.064180, 108.156954,"Destination", "marker 2");
+
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map_fragment);
         mapFragment.getMapAsync(this);
         showCurrentPlace();
-
+        initWidget();
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
         mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
-
             @Override
             // Return null here, so that getInfoContents() is called next.
             public View getInfoWindow(Marker arg0) {
@@ -98,6 +105,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         getLocationPermission();
         updateLocationUI();
         getDeviceLocation();
+
+        mMap.addMarker(destinationLocation.markerOptions);
+        mMap.addMarker(currentLocation.markerOptions);
 
     }
 
@@ -176,6 +186,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
                                     new LatLng(mLastKnownLocation.getLatitude(),
                                             mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
+                            currentLocation.markerOptions = new MarkerOptions().position(new LatLng(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude()));
                         } else {
                             Log.d(TAG, "Current location is null. Using defaults.");
                             Log.e(TAG, "Exception: %s", task.getException());
@@ -294,5 +305,34 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 .setItems(mLikelyPlaceNames, listener)
                 .show();
     }
+
+    void initWidget() {
+        imvGetDirection = (ImageView) findViewById(R.id.imv_get_direction);
+        tvGetDirection = (TextView) findViewById(R.id.tv_get_direction);
+        imvGetDirection.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                GetDirection(destinationLocation);
+            }
+        });
+        tvGetDirection.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                GetDirection(destinationLocation);
+            }
+        });
+    }
+
+    public void GetDirection(CustomMarker custom) {
+        String x_str = Double.toString(custom.x_pos);
+        String y_str = Double.toString(custom.y_pos);
+        Uri gmmIntentUri = Uri.parse("google.navigation:q="+ x_str + "," + y_str + "&mode=d");
+        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+        mapIntent.setPackage("com.google.android.apps.maps");
+        if (mapIntent.resolveActivity(getPackageManager()) != null) {
+            startActivity(mapIntent);
+        }
+    }
+
 
 }
