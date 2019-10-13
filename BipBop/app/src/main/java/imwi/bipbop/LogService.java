@@ -138,12 +138,12 @@ public class LogService extends Service {
                         public void onResponse(String response) {
                             // Display the first 500 characters of the response string.
                             Log.i("tag", response);
-                            if (response.equals("24") && isNoti == false)
+                            if (response.equals("1") && isNoti == false)
                             {
                                 isNoti = true;
                                 getData();
                             }
-                            if (!response.equals("24"))
+                            if (!response.equals("1"))
                             {
                                 isNoti = false;
                             }
@@ -210,20 +210,20 @@ public class LogService extends Service {
         }
 
         //Gọi giao dien Khi nhan nut nhan
-        Intent intentnhan = new Intent(this, Main2Activity.class);
+        Intent intentnhan = new Intent(this, MainActivity.class);
         intentnhan.putExtra("stufftype", stuffType);
         PendingIntent PIntentnhan = PendingIntent.getActivity(this, 0, intentnhan,
                 PendingIntent.FLAG_UPDATE_CURRENT);
 
         //Gọi giao dien Khi nhan nut bo
-        Intent intentbo = new Intent(this, Main3Activity.class);
+        Intent intentbo = new Intent(this, Main2Activity.class);
         PendingIntent PIntentbo = PendingIntent.getActivity(this, 0, intentbo,
                 PendingIntent.FLAG_UPDATE_CURRENT);
 
         //Gọi giao dienj khi co thong bao
-        Intent FullScreenPendingIntent = new Intent(this, MainActivity.class);
-        PendingIntent fullScreenPendingIntent = PendingIntent.getActivity(this, 0, FullScreenPendingIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT);
+//        Intent FullScreenPendingIntent = new Intent(this, MainActivity.class);
+//        PendingIntent fullScreenPendingIntent = PendingIntent.getActivity(this, 0, FullScreenPendingIntent,
+//                PendingIntent.FLAG_UPDATE_CURRENT);
 
 
         try {
@@ -238,21 +238,21 @@ public class LogService extends Service {
         NotificationCompat.Builder notificationBuilder =
                 new NotificationCompat.Builder(this, CHANNEL_ID)
                         .setSmallIcon(R.mipmap.ic_launcher)
-                        .setContentTitle("Có người cần bán:")
-                        .setContentText(stuffType)
+                        .setContentTitle("Có người cần bán")
+                        .setContentText("")
                         .setWhen(System.currentTimeMillis())
-                        .addAction(R.mipmap.ic_launcher, "Nhận", PIntentnhan) // #0;
-                        .addAction(R.mipmap.ic_launcher, "Bỏ", PIntentbo) // #0;
-                        .setFullScreenIntent(fullScreenPendingIntent, true);
+                        .addAction(R.mipmap.ic_launcher, "Xem", PIntentnhan) // #0;
+                        .addAction(R.mipmap.ic_launcher, "Bỏ qua", PIntentbo); // #0;
+                        //.setFullScreenIntent(fullScreenPendingIntent, true);
 
         notificationBuilder.build().flags |= Notification.FLAG_AUTO_CANCEL;
 
-        Intent notificationIntent = new Intent(this, MainActivity.class);
-        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT);
+//        Intent notificationIntent = new Intent(this, MainActivity.class);
+//        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent,
+//                PendingIntent.FLAG_UPDATE_CURRENT);
 
         //notificationBuilder.setContentIntent(contentIntent);
-        notificationBuilder.setFullScreenIntent(contentIntent, true);
+        //notificationBuilder.setFullScreenIntent(contentIntent, true);
 
         NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 

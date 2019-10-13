@@ -102,7 +102,7 @@
                 android:textSize="16sp" />
 
             <Button
-                android:id="@+id/btCloseDeal"
+                android:id="@+id/btImHere"
                 android:layout_width="0px"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="100px"

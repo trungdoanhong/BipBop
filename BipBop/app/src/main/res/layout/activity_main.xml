@@ -41,18 +41,19 @@
             android:weightSum="1">
 
             <Button
-                android:id="@+id/btCloseDeal"
+                android:id="@+id/btIgnore"
                 android:layout_width="0px"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
                 android:background="@drawable/tc" />
 
             <Button
-                android:id="@+id/button4"
+                android:id="@+id/btAccept"
                 android:layout_width="0px"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
-                android:background="@drawable/dy" />
+                android:background="@drawable/dy"
+                android:onClick="Accept" />
         </LinearLayout>
 
     </LinearLayout>

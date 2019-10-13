@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -69,10 +70,14 @@ public class Main2Activity extends AppCompatActivity implements OnMapReadyCallba
     public JSONObject jsonRoot;
     public String stuffType;
 
+    Button btImHere;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
+
+        InitWidgets();
 
 
         mGeoDataClient = Places.getGeoDataClient(this, null);
@@ -80,31 +85,36 @@ public class Main2Activity extends AppCompatActivity implements OnMapReadyCallba
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map_fragment);
-        mapFragment.getMapAsync(this);
-        showCurrentPlace();
+//        mapFragment.getMapAsync(this);
+//        showCurrentPlace();
 
 
 
-        try {
-            Intent gintent = getIntent();
-            StuffType = gintent.getStringExtra("stufftype");
-
-            Log.i("fdsf", StuffType);
-
-            jsonRoot = new JSONObject(StuffType);
-            Double xlocation = Double.parseDouble(jsonRoot.getString("xlocation")) ;
-            Double ylocation = Double.parseDouble(jsonRoot.getString("ylocation"));
-
-            destinationLocation = new CustomMarker(xlocation, ylocation, "", "");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            Intent gintent = getIntent();
+//            StuffType = gintent.getStringExtra("stufftype");
+//
+//            Log.i("fdsf", StuffType);
+//
+//            jsonRoot = new JSONObject(StuffType);
+//            Double xlocation = Double.parseDouble(jsonRoot.getString("xlocation")) ;
+//            Double ylocation = Double.parseDouble(jsonRoot.getString("ylocation"));
+//
+//            //destinationLocation = new CustomMarker(xlocation, ylocation, "", "");
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
 
         Intent intent = new Intent(this, LogService.class);
         startService(intent);
 
     }
 
+    private void InitWidgets() {
+        btImHere = (Button) findViewById(R.id.btImHere);
+
+        //btImHere.setVisibility(View.INVISIBLE);
+    }
 
 
     public void ChiDuong(View v) {
@@ -118,7 +128,7 @@ public class Main2Activity extends AppCompatActivity implements OnMapReadyCallba
 
         // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(this);
-        String url ="https://deltaxrobot.com/setsignal.php?vl=2";
+        String url ="https://deltaxrobot.com/setsignal.php?vl=3";
 
         Log.i("tag", url);
 

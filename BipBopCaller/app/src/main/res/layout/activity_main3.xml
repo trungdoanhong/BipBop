@@ -89,11 +89,22 @@
 
         </LinearLayout>
 
+        <Button
+            android:id="@+id/btAccept"
+            android:layout_width="match_parent"
+            android:layout_height="0px"
+            android:layout_weight="0.15"
+            android:background="@color/chu2"
+            android:onClick="Deal"
+            android:text="Xác nhận"
+            android:textSize="30sp"
+            tools:visibility="invisible" />
+
         <ImageView
             android:id="@+id/imgTich"
             android:layout_width="match_parent"
             android:layout_height="0px"
-            android:layout_marginTop="200px"
+            android:layout_marginTop="50px"
             android:layout_weight="0.2"
             android:onClick="moveHome"
             android:visibility="invisible"
