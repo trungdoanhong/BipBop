@@ -22,10 +22,11 @@
             android:weightSum="1">
 
             <ImageView
-                android:id="@+id/imageView"
+                android:id="@+id/ivHome"
                 android:layout_width="50px"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.4"
+                android:onClick="resetHome"
                 android:paddingTop="20px"
                 android:src="@drawable/title" />
 
@@ -252,7 +253,7 @@
                 android:weightSum="1">
 
                 <ImageView
-                    android:id="@+id/imageView6"
+                    android:id="@+id/img1"
                     android:layout_width="0px"
                     android:layout_height="match_parent"
                     android:layout_weight="0.5"

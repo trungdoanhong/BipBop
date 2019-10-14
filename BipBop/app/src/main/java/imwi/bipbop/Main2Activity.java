@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -38,6 +39,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import imwi.bipbop.CustomMarker;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -46,7 +48,7 @@ public class Main2Activity extends AppCompatActivity implements OnMapReadyCallba
 
     String StuffType = "{\"stufftype\":\"Phế liệu, giấy vụn, lon nước\",\"xlocation\":16.0743724,\"xlocation\":108.2238442}";
 
-    private static final String TAG = MainActivity.class.getSimpleName();
+    private static final String TAG = Main2Activity.class.getSimpleName();
 
     private GoogleMap mMap;
     private GeoDataClient mGeoDataClient;
@@ -79,19 +81,28 @@ public class Main2Activity extends AppCompatActivity implements OnMapReadyCallba
 
         InitWidgets();
 
-
         mGeoDataClient = Places.getGeoDataClient(this, null);
         mPlaceDetectionClient = Places.getPlaceDetectionClient(this, null);
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+
+
+
+		currentLocation = new CustomMarker(16.075368, 108.149045,"Makrer 1", "Da Nang" );
+        destinationLocation = new CustomMarker(16.064180, 108.156954,"Destination", "marker 2");
+
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map_fragment);
-//        mapFragment.getMapAsync(this);
-//        showCurrentPlace();
+        mapFragment.getMapAsync(this);
+        showCurrentPlace();
+		
+        Intent intent = new Intent(this, LogService.class);
+        startService(intent);
+    }
 
-
-
-//        try {
-//            Intent gintent = getIntent();
+    private  void getIntentData()
+    {
+        //        try {
+//            Intent intent = getIntent();
 //            StuffType = gintent.getStringExtra("stufftype");
 //
 //            Log.i("fdsf", StuffType);
@@ -104,10 +115,6 @@ public class Main2Activity extends AppCompatActivity implements OnMapReadyCallba
 //        } catch (JSONException e) {
 //            e.printStackTrace();
 //        }
-
-        Intent intent = new Intent(this, LogService.class);
-        startService(intent);
-
     }
 
     private void InitWidgets() {
@@ -153,9 +160,7 @@ public class Main2Activity extends AppCompatActivity implements OnMapReadyCallba
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
         mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
-
             @Override
             // Return null here, so that getInfoContents() is called next.
             public View getInfoWindow(Marker arg0) {
@@ -183,6 +188,7 @@ public class Main2Activity extends AppCompatActivity implements OnMapReadyCallba
 
         mMap.addMarker(destinationLocation.markerOptions);
         mMap.addMarker(currentLocation.markerOptions);
+
     }
 
     @Override
@@ -260,7 +266,7 @@ public class Main2Activity extends AppCompatActivity implements OnMapReadyCallba
                             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
                                     new LatLng(mLastKnownLocation.getLatitude(),
                                             mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
-                            currentLocation.markerOptions = new MarkerOptions().position(new LatLng(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude()));
+                           // currentLocation.markerOptions = new MarkerOptions().position(new LatLng(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude()));
                         } else {
                             Log.d(TAG, "Current location is null. Using defaults.");
                             Log.e(TAG, "Exception: %s", task.getException());
