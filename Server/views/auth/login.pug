@@ -1,0 +1,21 @@
+extends ../layout/layout.pug
+block content
+    .container
+            h1 Login
+            a(href='/')
+                button(class="btn btn-primary") Home
+            if error
+                each errors in error
+                    .alert.alert-danger= error
+            form(action="/createproduct", method="POST", enctype="multipart/form-data")
+                .form-group
+                    label(for="email") Email
+                    input#email.form-control(name="email" , type="text", value=values ? values.email : '')
+
+                .form-group
+                    label(for="password") Password
+                    input#password.form-control(name="password" , type="password", value=values ? values.password : '')
+                //- .form-group 
+                //-     label(for="image") Image
+                //-     input#image.form-control-file(name="image" type="file")
+                button.btn.btn-primary Login

@@ -1,0 +1,24 @@
+extends ../layout/layout.pug
+block content
+    html
+        head
+            title Books-Store
+        body
+        .navbar#navbar
+            nav.navbar.navbar-expand-lg.navbar-light
+                img#logo(src="/img/0893.jpg_wh860.jpg")
+                a#bookStore.navbar-brand(href='/') Books Store           
+                #navbarTogglerDemo01.collapse.navbar-collapse
+        .container
+            h1 View product
+            .row 
+                .col-sm-6.col-md-4.col-lg-3
+                    .card.mb-3
+                        b Name: &nbsp;
+                            span= product.name
+                        img(style="width:250px;height:200px").card-img(src=product.image)
+                        br
+                        b Price: &nbsp;
+                            span= product.price
+                        a.btn.btn-primary(href='/cart/add/' + product.id) add to cart
+                        

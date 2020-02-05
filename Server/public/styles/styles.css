@@ -1,0 +1,52 @@
+#navbar{
+    background-color: #d1cece;
+    display: flex;
+}
+#bookStore{
+    margin-left: 100px;
+    color: black;
+    font-family: Blackadder ITC Regular;
+    font-size: 50px
+
+}
+#formSearch{
+    margin-left:400px; 
+}
+#logo{
+    width: 50px;
+    height: 50px;
+}
+#cart{
+    margin-left: 300px;
+    font-size: 20px;
+}
+#login{
+    margin-left: 100px;
+    font-size: 20px;
+}
+#head{
+    margin-top: 10px;
+}
+#home{
+    font-size: 20px;
+    color: black;
+}
+#introduce{
+    margin-left: 100px;
+    font-size: 20px;
+    color: black;
+}
+#product{
+    margin-left: 100px;
+    font-size: 20px;
+    color: black;
+}
+#contact{
+    margin-left: 100px;
+    font-size: 20px;
+    color: black;
+}
+
+#viewProduct{
+    margin-top: 100px;
+}
